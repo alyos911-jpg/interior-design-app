@@ -122,433 +122,593 @@
     }
   </style>
   </head>
+<style>
+  .no-scrollbar::-webkit-scrollbar{display:none}
+  .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+  select option, select optgroup{background:#131b2e;color:#dae2fd}
+  input[type=date]{color-scheme:dark}
+</style>
 <body class="bg-background text-on-background min-h-screen antialiased flex flex-col font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+
 <!-- Top Anchor Shell -->
 <header class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-margin h-16 w-full max-w-md mx-auto bg-surface-container-low border-b border-outline-variant">
-<div class="flex items-center gap-space-sm">
-<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden flex items-center justify-center bg-surface-container-high">
-<span class="material-symbols-outlined text-primary text-lg" data-icon="architecture">architecture</span>
-</div>
-<div>
-<div class="flex items-center gap-1.5 cursor-pointer">
-<span class="text-headline-sm font-headline-sm font-bold text-on-surface tracking-tight">Villa Ahmed</span>
-<span class="material-symbols-outlined text-on-surface-variant text-base" data-icon="expand_more">expand_more</span>
-</div>
-<div class="flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-<span class="text-label-tag font-label-tag text-on-surface-variant uppercase">Site Phase 02 · Execution</span>
-</div>
-</div>
-</div>
-<div class="flex items-center gap-space-xs">
-<button aria-label="Excel Sync Status" class="w-10 h-10 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-all">
-<span class="material-symbols-outlined text-xl" data-icon="sync">sync</span>
-</button>
-<button aria-label="Notifications" class="w-10 h-10 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-all">
-<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
-</button>
-</div>
+  <div class="flex items-center gap-space-sm cursor-pointer" data-act="nav" data-view="projects">
+    <div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden flex items-center justify-center bg-surface-container-high">
+      <span class="material-symbols-outlined text-primary text-lg">architecture</span>
+    </div>
+    <div>
+      <div class="flex items-center gap-1.5">
+        <span id="hdr-name" class="text-headline-sm font-headline-sm font-bold text-on-surface tracking-tight"></span>
+        <span class="material-symbols-outlined text-on-surface-variant text-base">expand_more</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+        <span id="hdr-phase" class="text-label-tag font-label-tag text-on-surface-variant uppercase"></span>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center gap-space-xs">
+    <button aria-label="Save status" data-act="sync" class="w-10 h-10 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-all">
+      <span class="material-symbols-outlined text-xl">sync</span>
+    </button>
+    <button aria-label="Notifications" data-act="alerts" class="relative w-10 h-10 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-all">
+      <span class="material-symbols-outlined text-xl">notifications</span>
+      <span id="alert-dot" class="hidden absolute top-2 right-2 w-2 h-2 rounded-full bg-error"></span>
+    </button>
+  </div>
 </header>
+
 <!-- Main Canvas -->
-<main class="w-full max-w-md mx-auto pt-20 pb-28 px-margin flex-1 flex flex-col gap-space-md">
-<!-- Excel Sync Status Strip -->
-<div class="flex items-center justify-between px-space-md py-space-xs bg-surface-container-lowest border border-outline-variant rounded">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-primary text-base" data-icon="cloud_done">cloud_done</span>
-<span class="text-label-tag font-label-tag text-on-surface-variant">Excel Sync Status: <strong class="text-on-surface font-semibold">Synced 10m ago</strong></span>
-</div>
-<button class="flex items-center gap-1 text-primary text-label-tag font-label-tag hover:underline" title="Download synced master BOQ spreadsheet">
-<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
-<span>Export .XLSX</span>
-</button>
-</div>
-<!-- Search & Filter Controls -->
-<div class="flex items-center gap-space-xs">
-<div class="relative flex-1">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base" data-icon="search">search</span>
-<input class="w-full bg-surface-container-lowest border border-outline-variant rounded pl-9 pr-space-md py-2 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary-container transition-colors" placeholder="Search 142 BOQ items, categories..." type="text"/>
-</div>
-<button aria-label="Filter Options" class="w-10 h-10 flex items-center justify-center bg-surface-container-high border border-outline-variant rounded text-on-surface hover:bg-surface-container-highest active:scale-95 transition-all">
-<span class="material-symbols-outlined text-lg" data-icon="tune">tune</span>
-</button>
-</div>
-<!-- BOQ Summary Telemetry Plate (High Contrast Architectural White Plate) -->
-<section class="bg-white text-[#0F172A] p-space-md rounded-xl border border-[#E2E8F0] shadow-sm relative overflow-hidden">
-<div class="flex items-center justify-between pb-space-sm border-b border-[#E2E8F0]">
-<div>
-<span class="text-[10px] font-bold tracking-wider text-[#64748B] uppercase block">BOQ Financial Telemetry</span>
-<h2 class="text-headline-sm font-headline-sm text-[#0F172A]">Villa Ahmed Finishes</h2>
-</div>
-<span class="text-label-tag font-label-tag px-2 py-0.5 rounded bg-[#F1F5F9] text-[#334155] border border-[#CBD5E1]">
-          43.3% Absorbed
-        </span>
-</div>
-<!-- Financial Metrics Grid -->
-<div class="grid grid-cols-2 gap-space-md mt-space-md">
-<div>
-<span class="text-label-tag font-label-tag text-[#64748B] uppercase block">Total Planned</span>
-<div class="flex items-baseline gap-1 mt-0.5">
-<span class="text-xs font-semibold text-[#64748B]">EGP</span>
-<span class="font-label-numeric-lg text-label-numeric-lg text-[#0F172A] tracking-tight">1,500,000</span>
-</div>
-</div>
-<div>
-<span class="text-label-tag font-label-tag text-[#64748B] uppercase block">Actual Spent</span>
-<div class="flex items-baseline gap-1 mt-0.5">
-<span class="text-xs font-semibold text-[#64748B]">EGP</span>
-<span class="font-label-numeric-lg text-label-numeric-lg text-[#0F172A] tracking-tight">650,000</span>
-</div>
-</div>
-</div>
-<!-- Linear Absorption Progress Bar -->
-<div class="mt-space-md">
-<div class="w-full bg-[#E2E8F0] h-2 rounded-full overflow-hidden flex">
-<div class="bg-primary-container h-full" style="width: 43.3%"></div>
-<div class="bg-[#F87171] h-full" style="width: 5%"></div>
-</div>
-</div>
-<!-- Net Variance Highlight -->
-<div class="mt-space-md pt-space-xs border-t border-[#F1F5F9] flex items-center justify-between">
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[#059669] text-sm" data-icon="check_circle">check_circle</span>
-<span class="text-label-tag font-label-tag text-[#475569]">Total Variance:</span>
-</div>
-<span class="font-label-numeric-md text-label-numeric-md text-[#059669] font-semibold">
-          +850,000 EGP Unspent
-        </span>
-</div>
-</section>
-<!-- Filter Badges / Interactive Scroller -->
-<div class="flex items-center gap-space-xs overflow-x-auto pb-1 no-scrollbar text-label-tag font-label-tag">
-<button class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-bold whitespace-nowrap active:scale-95 transition-all">
-        All Categories (8)
-      </button>
-<button class="px-3 py-1.5 rounded-full bg-surface-container-high text-error border border-error/30 font-bold whitespace-nowrap active:scale-95 transition-all flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-        Over Budget (1)
-      </button>
-<button class="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant border border-outline-variant hover:border-outline font-medium whitespace-nowrap active:scale-95 transition-all">
-        In Progress (4)
-      </button>
-<button class="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant border border-outline-variant hover:border-outline font-medium whitespace-nowrap active:scale-95 transition-all">
-        Pending (3)
-      </button>
-</div>
-<!-- Categorical Hierarchical Accordions -->
-<div class="flex flex-col gap-space-md">
-<!-- Category 1: Gypsum Works (OVER BUDGET ALERT) -->
-<section class="bg-surface-container-low border border-error/50 rounded-lg overflow-hidden shadow-sm">
-<!-- Accordion Header -->
-<div class="p-space-md bg-surface-container/60 border-b border-error/20 flex flex-col gap-space-xs cursor-pointer">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-error text-lg" data-icon="warning">warning</span>
-<h3 class="text-headline-sm font-headline-sm text-on-surface">1. Gypsum Works</h3>
-</div>
-<span class="bg-[#7F1D1D] text-[#FCA5A5] text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase border border-error/40">
-              OVER BUDGET
-            </span>
-</div>
-<!-- Category Financial Breakdown -->
-<div class="grid grid-cols-3 gap-2 pt-1 font-label-numeric-sm text-label-numeric-sm">
-<div>
-<span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Planned</span>
-<span class="text-on-surface">100,000 <span class="text-[10px] text-outline">EGP</span></span>
-</div>
-<div>
-<span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Spent</span>
-<span class="text-error font-semibold">108,000 <span class="text-[10px] text-outline">EGP</span></span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-error font-label-tag block uppercase">Variance</span>
-<span class="text-[#FCA5A5] font-semibold">-8,000 EGP (-8.0%)</span>
-</div>
-</div>
-</div>
-<!-- Child Items Breakdown -->
-<div class="divide-y divide-outline-variant/40">
-<!-- Item 02.1 (Over budget item) -->
-<article class="p-space-md flex flex-col gap-2 bg-error-container/10">
-<div class="flex items-start justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-label-numeric-sm text-label-numeric-sm text-primary font-bold">02.1</span>
-<h4 class="font-body-md text-body-md text-on-surface font-semibold">Gypsum Board Ceilings</h4>
-</div>
-<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">Plasterboard 12.5mm · Qty: 240 m² @ 250 EGP</p>
-</div>
-<span class="bg-[#7F1D1D] text-[#FCA5A5] text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase">
-                Over-budget
-              </span>
-</div>
-<div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>
-<span class="text-on-surface-variant">60,000 EGP</span>
-</div>
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span>
-<span class="text-on-surface font-medium">68,500 EGP</span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-error uppercase block font-label-tag">Variance</span>
-<span class="text-error font-semibold">-8,500 EGP</span>
-</div>
-</div>
-<div class="flex items-center justify-between text-body-sm text-body-sm text-on-surface-variant pt-1">
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-sm text-outline" data-icon="receipt_long">receipt_long</span>
-<span class="text-[11px]">4 transactions logged</span>
-</div>
-<button class="text-label-tag font-label-tag text-primary hover:underline flex items-center gap-0.5">
-<span>View Slips</span>
-<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
-</button>
-</div>
-</article>
-<!-- Item 02.2 -->
-<article class="p-space-md flex flex-col gap-2 hover:bg-surface-container/30 transition-colors">
-<div class="flex items-start justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-label-numeric-sm text-label-numeric-sm text-on-surface-variant font-bold">02.2</span>
-<h4 class="font-body-md text-body-md text-on-surface font-medium">Shadow Gaps &amp; Curtain Boxes</h4>
-</div>
-<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">Perimeter hidden extrusion profile</p>
-</div>
-<span class="bg-[#064E3B] text-[#6EE7B7] text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase">
-                Approved
-              </span>
-</div>
-<div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>
-<span class="text-on-surface-variant">25,000 EGP</span>
-</div>
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span>
-<span class="text-on-surface font-medium">24,000 EGP</span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-primary uppercase block font-label-tag">Variance</span>
-<span class="text-primary font-semibold">+1,000 EGP</span>
-</div>
-</div>
-</article>
-<!-- Item 02.3 -->
-<article class="p-space-md flex flex-col gap-2 hover:bg-surface-container/30 transition-colors">
-<div class="flex items-start justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-label-numeric-sm text-label-numeric-sm text-on-surface-variant font-bold">02.3</span>
-<h4 class="font-body-md text-body-md text-on-surface font-medium">Moisture Resistant Plasterboard</h4>
-</div>
-<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">Wet areas: Master + Guest Bathrooms</p>
-</div>
-<span class="bg-[#78350F] text-[#FCD34D] text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase">
-                PO Issued
-              </span>
-</div>
-<div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>
-<span class="text-on-surface-variant">15,000 EGP</span>
-</div>
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span>
-<span class="text-on-surface font-medium">15,500 EGP</span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-error uppercase block font-label-tag">Variance</span>
-<span class="text-error font-semibold">-500 EGP</span>
-</div>
-</div>
-</article>
-</div>
-</section>
-<!-- Category 2: Electrical Works (ON TRACK) -->
-<section class="bg-surface-container-low border border-outline-variant rounded-lg overflow-hidden">
-<!-- Accordion Header -->
-<div class="p-space-md bg-surface-container/40 border-b border-outline-variant flex flex-col gap-space-xs cursor-pointer">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-lg" data-icon="electric_bolt">electric_bolt</span>
-<h3 class="text-headline-sm font-headline-sm text-on-surface">2. Electrical Works</h3>
-</div>
-<span class="bg-[#064E3B] text-[#6EE7B7] text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase border border-primary/30">
-              ON TRACK
-            </span>
-</div>
-<!-- Category Financial Breakdown -->
-<div class="grid grid-cols-3 gap-2 pt-1 font-label-numeric-sm text-label-numeric-sm">
-<div>
-<span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Planned</span>
-<span class="text-on-surface">180,000 <span class="text-[10px] text-outline">EGP</span></span>
-</div>
-<div>
-<span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Spent</span>
-<span class="text-on-surface font-medium">135,000 <span class="text-[10px] text-outline">EGP</span></span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-primary font-label-tag block uppercase">Remaining</span>
-<span class="text-primary font-semibold">45,000 EGP (75%)</span>
-</div>
-</div>
-</div>
-<!-- Child Items Breakdown -->
-<div class="divide-y divide-outline-variant/40">
-<!-- Item 01.1 -->
-<article class="p-space-md flex flex-col gap-2 hover:bg-surface-container/30 transition-colors">
-<div class="flex items-start justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-label-numeric-sm text-label-numeric-sm text-on-surface-variant font-bold">01.1</span>
-<h4 class="font-body-md text-body-md text-on-surface font-medium">Cables &amp; Conduits</h4>
-</div>
-<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">Elsewedy 3x4mm Fire-retardant</p>
-</div>
-<span class="bg-[#064E3B] text-[#6EE7B7] text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase">
-                Delivered
-              </span>
-</div>
-<div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>
-<span class="text-on-surface-variant">70,000 EGP</span>
-</div>
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span>
-<span class="text-on-surface font-medium">65,000 EGP</span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-primary uppercase block font-label-tag">Remaining</span>
-<span class="text-primary font-semibold">+5,000 EGP</span>
-</div>
-</div>
-</article>
-<!-- Item 01.2 -->
-<article class="p-space-md flex flex-col gap-2 hover:bg-surface-container/30 transition-colors">
-<div class="flex items-start justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-label-numeric-sm text-label-numeric-sm text-on-surface-variant font-bold">01.2</span>
-<h4 class="font-body-md text-body-md text-on-surface font-medium">Socket Outlets &amp; Switches</h4>
-</div>
-<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">Schneider Unica Studio Metal</p>
-</div>
-<span class="bg-[#1E3A8A] text-[#93C5FD] text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase">
-                Revised BOQ
-              </span>
-</div>
-<div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>
-<span class="text-on-surface-variant">45,000 EGP</span>
-</div>
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span>
-<span class="text-on-surface font-medium">38,000 EGP</span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-primary uppercase block font-label-tag">Remaining</span>
-<span class="text-primary font-semibold">+7,000 EGP</span>
-</div>
-</div>
-</article>
-<!-- Item 01.3 -->
-<article class="p-space-md flex flex-col gap-2 hover:bg-surface-container/30 transition-colors">
-<div class="flex items-start justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-label-numeric-sm text-label-numeric-sm text-on-surface-variant font-bold">01.3</span>
-<h4 class="font-body-md text-body-md text-on-surface font-medium">Architectural Spotlight Fixtures</h4>
-</div>
-<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">Dark-light anti-glare trimless 3000K</p>
-</div>
-<span class="bg-[#78350F] text-[#FCD34D] text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase">
-                Partial Dispatch
-              </span>
-</div>
-<div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>
-<span class="text-on-surface-variant">65,000 EGP</span>
-</div>
-<div>
-<span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span>
-<span class="text-on-surface font-medium">32,000 EGP</span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-primary uppercase block font-label-tag">Remaining</span>
-<span class="text-primary font-semibold">+33,000 EGP</span>
-</div>
-</div>
-</article>
-</div>
-</section>
-<!-- Category 3: Woodwork & Interior Joinery (EARLY STAGE) -->
-<section class="bg-surface-container-low border border-outline-variant rounded-lg overflow-hidden">
-<!-- Accordion Header Collapsed -->
-<div class="p-space-md bg-surface-container/40 flex flex-col gap-space-xs cursor-pointer hover:bg-surface-container-high transition-colors">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary text-lg" data-icon="carpenter">carpenter</span>
-<h3 class="text-headline-sm font-headline-sm text-on-surface">3. Woodwork &amp; Joinery</h3>
-</div>
-<div class="flex items-center gap-2">
-<span class="bg-surface-container-highest text-secondary text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase border border-secondary/30">
-                EARLY STAGE
-              </span>
-<span class="material-symbols-outlined text-on-surface-variant text-base" data-icon="expand_more">expand_more</span>
-</div>
-</div>
-<!-- Category Financial Breakdown -->
-<div class="grid grid-cols-3 gap-2 pt-1 font-label-numeric-sm text-label-numeric-sm">
-<div>
-<span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Planned</span>
-<span class="text-on-surface">220,000 <span class="text-[10px] text-outline">EGP</span></span>
-</div>
-<div>
-<span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Spent</span>
-<span class="text-on-surface font-medium">70,000 <span class="text-[10px] text-outline">EGP</span></span>
-</div>
-<div class="text-right">
-<span class="text-[10px] text-primary font-label-tag block uppercase">Remaining</span>
-<span class="text-primary font-semibold">+150,000 EGP</span>
-</div>
-</div>
-</div>
-</section>
-</div>
-</main>
-<!-- Contextual Quick-Capture FAB (Floating Action Button for Expenses) -->
-<div class="fixed bottom-20 right-6 z-40 max-w-md mx-auto">
-<button aria-label="Add Expense" class="flex items-center gap-2 px-4 h-14 bg-gradient-to-r from-primary-container to-primary text-on-primary-fixed font-bold rounded-full shadow-lg active:scale-95 transition-transform">
-<span class="material-symbols-outlined text-2xl font-bold" data-icon="add">add</span>
-<span class="text-body-md font-semibold tracking-tight pr-1">Add Expense</span>
-</button>
-</div>
-<!-- Bottom Navigation Bar (Generated strictly from Shared Components JSON) -->
-<nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center h-16 px-space-sm w-full max-w-md mx-auto bg-surface-container-lowest border-t border-outline-variant">
-<!-- Tab 1: Projects -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant py-space-xs hover:text-primary transition-colors duration-150 active:scale-95 transition-transform" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="domain">domain</span>
-<span class="text-label-tag font-label-tag mt-0.5">Projects</span>
-</a>
-<!-- Tab 2: Cash Flow -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant py-space-xs hover:text-primary transition-colors duration-150 active:scale-95 transition-transform" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="account_balance_wallet">account_balance_wallet</span>
-<span class="text-label-tag font-label-tag mt-0.5">Cash Flow</span>
-</a>
-<!-- Tab 3: BOQ (ACTIVE STATE TARGET: Exactly matches BOQ screen intent) -->
-<a class="flex flex-col items-center justify-center text-primary py-space-xs hover:text-primary transition-colors duration-150 active:scale-95 transition-transform" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="format_list_numbered" style="font-variation-settings: 'FILL' 1;">format_list_numbered</span>
-<span class="text-label-tag font-label-tag mt-0.5 font-bold">BOQ</span>
-</a>
-<!-- Tab 4: Reports -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant py-space-xs hover:text-primary transition-colors duration-150 active:scale-95 transition-transform" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="analytics">analytics</span>
-<span class="text-label-tag font-label-tag mt-0.5">Reports</span>
-</a>
-</nav>
+<main id="app" class="w-full max-w-md mx-auto pt-20 pb-28 px-margin flex-1 flex flex-col gap-space-md"></main>
+
+<!-- Floating Add Expense -->
+<div class="fixed bottom-20 left-0 right-0 z-40 max-w-md mx-auto pointer-events-none">
+  <button aria-label="Add Expense" data-act="fab" class="pointer-events-auto float-right mr-4 flex items-center gap-2 px-4 h-14 bg-gradient-to-r from-primary-container to-primary text-on-primary-fixed font-bold rounded-full shadow-lg active:scale-95 transition-transform">
+    <span class="material-symbols-outlined text-2xl font-bold">add</span>
+    <span class="text-body-md font-semibold tracking-tight pr-1">Add Expense</span>
+  </button>
+</div>
+
+<!-- Bottom Navigation -->
+<nav id="nav" class="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center h-16 px-space-sm w-full max-w-md mx-auto bg-surface-container-lowest border-t border-outline-variant"></nav>
+
+<!-- Sheet (modal) + toast -->
+<div id="sheet" class="hidden fixed inset-0 z-[60] bg-black/60 items-end justify-center" data-act="close-bd"></div>
+<div id="toast" class="hidden fixed bottom-36 left-1/2 -translate-x-1/2 z-[70] bg-inverse-surface text-inverse-on-surface text-body-sm px-4 py-2 rounded-full shadow-lg max-w-[90%] text-center"></div>
+<input id="import-file" type="file" accept="application/json,.json" class="hidden"/>
+
+<script>
+/* ============ helpers ============ */
+const STORE_KEY = 'interior-boq-v1';
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3);
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+const fdate = d => new Date(d + 'T00:00').toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'project';
+const ago = ts => { if (!ts) return 'never'; const m = Math.round((Date.now() - ts) / 60000); if (m < 1) return 'just now'; if (m < 60) return m + 'm ago'; const h = Math.round(m / 60); return h < 24 ? h + 'h ago' : Math.round(h / 24) + 'd ago'; };
+
+const STATUSES = {
+  'Pending': ['#334155', '#CBD5E1'],
+  'PO Issued': ['#78350F', '#FCD34D'],
+  'Approved': ['#064E3B', '#6EE7B7'],
+  'Delivered': ['#064E3B', '#6EE7B7'],
+  'Revised BOQ': ['#1E3A8A', '#93C5FD'],
+  'Partial Dispatch': ['#78350F', '#FCD34D']
+};
+const ICONS = {
+  'Construction': 'construction', 'Electrical': 'electric_bolt', 'Joinery / Woodwork': 'carpenter',
+  'Plumbing': 'plumbing', 'Paint & Finishes': 'format_paint', 'Furniture': 'chair',
+  'Windows & Doors': 'window', 'Outdoor': 'deck', 'Lighting': 'lightbulb', 'Other': 'category'
+};
+const STD_CATEGORIES = [
+  ['Gypsum Works','construction'], ['Electrical Works','electric_bolt'], ['Woodwork & Joinery','carpenter'],
+  ['Plumbing','plumbing'], ['Painting','format_paint'], ['Flooring','category'], ['Lighting','lightbulb'], ['Furniture','chair']
+];
+
+/* ============ data ============ */
+function seed() {
+  const ex = (amount, note, date) => ({id: uid(), amount, note, date, ts: Date.now()});
+  const it = (name, desc, planned, status, exps) => ({id: uid(), name, desc, planned, status, expenses: exps});
+  return {
+    currentId: 'p1', savedAt: Date.now(),
+    projects: [{
+      id: 'p1', name: 'Villa Ahmed', phase: 'Site Phase 02 · Execution',
+      categories: [
+        {id: uid(), name: 'Gypsum Works', icon: 'construction', items: [
+          it('Gypsum Board Ceilings', 'Plasterboard 12.5mm · Qty: 240 m² @ 250 EGP', 60000, 'Approved',
+             [ex(20000,'Advance to supplier','2026-09-02'), ex(18500,'Second delivery','2026-09-09'), ex(15000,'Labour','2026-09-16'), ex(15000,'Extra boards','2026-09-23')]),
+          it('Shadow Gaps & Curtain Boxes', 'Perimeter hidden extrusion profile', 25000, 'Approved', [ex(24000,'Profiles + install','2026-09-12')]),
+          it('Moisture Resistant Plasterboard', 'Wet areas: Master + Guest Bathrooms', 15000, 'PO Issued', [ex(15500,'Supplier invoice','2026-09-20')])
+        ]},
+        {id: uid(), name: 'Electrical Works', icon: 'electric_bolt', items: [
+          it('Cables & Conduits', 'Elsewedy 3x4mm Fire-retardant', 70000, 'Delivered', [ex(65000,'Full delivery','2026-09-05')]),
+          it('Socket Outlets & Switches', 'Schneider Unica Studio Metal', 45000, 'Revised BOQ', [ex(38000,'Order #1','2026-09-14')]),
+          it('Architectural Spotlight Fixtures', 'Dark-light anti-glare trimless 3000K', 65000, 'Partial Dispatch', [ex(32000,'First dispatch','2026-09-25')])
+        ]},
+        {id: uid(), name: 'Woodwork & Joinery', icon: 'carpenter', items: [
+          it('Wardrobes & Built-in Joinery', 'Master + guest bedrooms', 220000, 'PO Issued', [ex(70000,'30% advance','2026-09-28')])
+        ]}
+      ]
+    }]
+  };
+}
+function sanitize(s) {
+  if (!s || !Array.isArray(s.projects) || !s.projects.length) throw new Error('bad data');
+  s.projects.forEach(p => {
+    p.id = p.id || uid(); p.name = p.name || 'Untitled'; p.phase = p.phase || '';
+    p.categories = Array.isArray(p.categories) ? p.categories : [];
+    p.categories.forEach(c => {
+      c.id = c.id || uid(); c.name = c.name || 'Category'; c.icon = c.icon || 'category';
+      c.items = Array.isArray(c.items) ? c.items : [];
+      c.items.forEach(i => {
+        i.id = i.id || uid(); i.name = i.name || 'Item'; i.desc = i.desc || ''; i.planned = Number(i.planned) || 0;
+        i.status = STATUSES[i.status] ? i.status : 'Pending';
+        i.expenses = Array.isArray(i.expenses) ? i.expenses : [];
+        i.expenses.forEach(x => { x.id = x.id || uid(); x.amount = Number(x.amount) || 0; x.date = x.date || today(); x.note = x.note || ''; x.ts = x.ts || 0; });
+      });
+    });
+  });
+  if (!s.projects.some(p => p.id === s.currentId)) s.currentId = s.projects[0].id;
+  return s;
+}
+let state;
+try { state = sanitize(JSON.parse(localStorage.getItem(STORE_KEY))); } catch (e) { state = seed(); }
+function save() { state.savedAt = Date.now(); try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { toast('Could not save on this device (storage blocked)'); } }
+
+let ui = {view: 'boq', q: '', filter: 'all', statusFilter: '', open: {}, slips: {}};
+
+/* ============ calculations ============ */
+const proj = () => state.projects.find(p => p.id === state.currentId) || state.projects[0];
+const itemActual = i => i.expenses.reduce((s, x) => s + x.amount, 0);
+const catPlanned = c => c.items.reduce((s, i) => s + i.planned, 0);
+const catActual = c => c.items.reduce((s, i) => s + itemActual(i), 0);
+function catState(c) {
+  const p = catPlanned(c), a = catActual(c);
+  if (a > p) return 'over';
+  if (a <= 0) return 'pending';
+  return p > 0 && a / p < 0.4 ? 'early' : 'track';
+}
+function totals(p) {
+  let planned = 0, actual = 0, overrun = 0;
+  p.categories.forEach(c => { const cp = catPlanned(c), ca = catActual(c); planned += cp; actual += ca; if (ca > cp) overrun += ca - cp; });
+  return {planned, actual, overrun};
+}
+function findItem(id) {
+  for (const c of proj().categories) for (const i of c.items) if (i.id === id) return {c, i};
+  return null;
+}
+function allExpenses(p) {
+  const out = [];
+  p.categories.forEach(c => c.items.forEach(i => i.expenses.forEach(x => out.push({c, i, x}))));
+  return out.sort((a, b) => b.x.date.localeCompare(a.x.date) || b.x.ts - a.x.ts);
+}
+
+/* ============ ui bits ============ */
+const INP = 'w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-0';
+const LBL = 'text-label-tag font-label-tag text-on-surface-variant uppercase block mb-1';
+const badge = (label, bg, fg, extra = '') => `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest uppercase whitespace-nowrap ${extra}" style="background:${bg};color:${fg}">${esc(label)}</span>`;
+const CAT_BADGE = {over: ['OVER BUDGET','#7F1D1D','#FCA5A5'], track: ['ON TRACK','#064E3B','#6EE7B7'], early: ['EARLY STAGE','#2d3449','#b4c5ff'], pending: ['NOT STARTED','#2d3449','#bccac0']};
+
+function toast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add('hidden'), 2600);
+}
+function openSheet(title, html) {
+  const s = document.getElementById('sheet');
+  s.innerHTML = `<div class="w-full max-w-md bg-surface-container border-t border-outline-variant rounded-t-xl max-h-[92vh] overflow-y-auto p-margin pb-8">
+    <div class="flex items-center justify-between mb-3"><h3 class="text-headline-sm font-headline-sm text-on-surface">${esc(title)}</h3>
+    <button type="button" data-act="close" class="w-9 h-9 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high"><span class="material-symbols-outlined">close</span></button></div>${html}</div>`;
+  s.classList.remove('hidden'); s.classList.add('flex');
+  const f = s.querySelector('input:not([type=radio]):not([type=hidden]), select'); if (f && window.innerWidth > 600) f.focus();
+}
+function closeSheet() { const s = document.getElementById('sheet'); s.classList.add('hidden'); s.classList.remove('flex'); s.innerHTML = ''; }
+const submitBtn = (label, extra = '') => `<div class="flex gap-2 pt-1">${extra}<button type="submit" class="flex-1 h-11 rounded bg-gradient-to-r from-primary-container to-primary text-on-primary-fixed font-bold active:scale-95 transition-transform">${esc(label)}</button></div>`;
+const dangerBtn = (act, label, data = '') => `<button type="button" data-act="${act}" ${data} class="h-11 px-4 rounded border border-error/50 text-error font-semibold active:scale-95 transition-transform">${esc(label)}</button>`;
+
+/* ============ render ============ */
+function render() {
+  const p = proj();
+  document.getElementById('hdr-name').textContent = p.name;
+  document.getElementById('hdr-phase').textContent = p.phase || 'No phase set';
+  const hasAlert = p.categories.some(c => catState(c) === 'over' || c.items.some(i => itemActual(i) > i.planned));
+  document.getElementById('alert-dot').classList.toggle('hidden', !hasAlert);
+  const tabs = [['projects','domain','Projects'], ['cashflow','account_balance_wallet','Cash Flow'], ['boq','format_list_numbered','BOQ'], ['reports','analytics','Reports']];
+  document.getElementById('nav').innerHTML = tabs.map(([v, ic, l]) => {
+    const on = ui.view === v;
+    return `<button data-act="nav" data-view="${v}" class="flex flex-col items-center justify-center ${on ? 'text-primary' : 'text-on-surface-variant'} py-space-xs hover:text-primary transition-colors active:scale-95">
+      <span class="material-symbols-outlined text-xl" ${on ? `style="font-variation-settings:'FILL' 1;"` : ''}>${ic}</span>
+      <span class="text-label-tag font-label-tag mt-0.5 ${on ? 'font-bold' : ''}">${l}</span></button>`;
+  }).join('');
+  document.querySelector('[data-act="fab"]').parentElement.classList.toggle('hidden', ui.view === 'projects');
+  const app = document.getElementById('app');
+  if (ui.view === 'projects') app.innerHTML = viewProjects();
+  else if (ui.view === 'cashflow') app.innerHTML = viewCashflow(p);
+  else if (ui.view === 'reports') app.innerHTML = viewReports(p);
+  else { app.innerHTML = viewBoq(p); fillBoqList(); }
+}
+
+/* ---------- BOQ view ---------- */
+function viewBoq(p) {
+  const t = totals(p), pct = t.planned ? t.actual / t.planned * 100 : 0;
+  const green = Math.max(0, Math.min(100, t.planned ? (t.actual - t.overrun) / t.planned * 100 : 0));
+  const red = Math.max(0, Math.min(100 - green, t.planned ? t.overrun / t.planned * 100 : 0));
+  const variance = t.planned - t.actual;
+  const counts = {all: p.categories.length, over: 0, progress: 0, pending: 0};
+  p.categories.forEach(c => { const s = catState(c); if (s === 'over') counts.over++; else if (s === 'pending') counts.pending++; else counts.progress++; });
+  const chip = (key, label, n, dot) => {
+    const on = ui.filter === key;
+    return `<button data-act="chip" data-key="${key}" class="px-3 py-1.5 rounded-full whitespace-nowrap active:scale-95 transition-all flex items-center gap-1 ${on ? 'bg-primary text-on-primary font-bold' : 'bg-surface-container-high text-on-surface-variant border border-outline-variant font-medium'}">${dot && !on ? '<span class="w-1.5 h-1.5 rounded-full bg-error"></span>' : ''}${label} (${n})</button>`;
+  };
+  return `
+  <div class="flex items-center justify-between px-space-md py-space-xs bg-surface-container-lowest border border-outline-variant rounded">
+    <div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-base">cloud_done</span>
+      <span class="text-label-tag font-label-tag text-on-surface-variant">Saved on this device: <strong class="text-on-surface font-semibold">${ago(state.savedAt)}</strong></span></div>
+    <button data-act="export-xlsx" class="flex items-center gap-1 text-primary text-label-tag font-label-tag hover:underline"><span class="material-symbols-outlined text-sm">download</span><span>Export .XLSX</span></button>
+  </div>
+  <div class="flex items-center gap-space-xs">
+    <div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
+      <input id="q" value="${esc(ui.q)}" class="w-full bg-surface-container-lowest border border-outline-variant rounded pl-9 pr-space-md py-2 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary-container transition-colors" placeholder="Search BOQ items, categories..." type="text"/></div>
+    <button aria-label="Filter Options" data-act="filter-modal" class="relative w-10 h-10 flex items-center justify-center bg-surface-container-high border ${ui.statusFilter ? 'border-primary' : 'border-outline-variant'} rounded text-on-surface hover:bg-surface-container-highest active:scale-95 transition-all"><span class="material-symbols-outlined text-lg">tune</span></button>
+  </div>
+  <section class="bg-white text-[#0F172A] p-space-md rounded-xl border border-[#E2E8F0] shadow-sm">
+    <div class="flex items-center justify-between pb-space-sm border-b border-[#E2E8F0]">
+      <div><span class="text-[10px] font-bold tracking-wider text-[#64748B] uppercase block">BOQ Financial Telemetry</span><h2 class="text-headline-sm font-headline-sm text-[#0F172A]">${esc(p.name)}</h2></div>
+      <span class="text-label-tag font-label-tag px-2 py-0.5 rounded bg-[#F1F5F9] text-[#334155] border border-[#CBD5E1]">${pct.toFixed(1)}% Absorbed</span>
+    </div>
+    <div class="grid grid-cols-2 gap-space-md mt-space-md">
+      <div><span class="text-label-tag font-label-tag text-[#64748B] uppercase block">Total Planned</span><div class="flex items-baseline gap-1 mt-0.5"><span class="text-xs font-semibold text-[#64748B]">EGP</span><span class="font-label-numeric-lg text-label-numeric-lg text-[#0F172A] tracking-tight">${fmt(t.planned)}</span></div></div>
+      <div><span class="text-label-tag font-label-tag text-[#64748B] uppercase block">Actual Spent</span><div class="flex items-baseline gap-1 mt-0.5"><span class="text-xs font-semibold text-[#64748B]">EGP</span><span class="font-label-numeric-lg text-label-numeric-lg text-[#0F172A] tracking-tight">${fmt(t.actual)}</span></div></div>
+    </div>
+    <div class="mt-space-md"><div class="w-full bg-[#E2E8F0] h-2 rounded-full overflow-hidden flex"><div class="bg-primary-container h-full" style="width:${green}%"></div><div class="bg-[#F87171] h-full" style="width:${red}%"></div></div></div>
+    <div class="mt-space-md pt-space-xs border-t border-[#F1F5F9] flex items-center justify-between">
+      <div class="flex items-center gap-1.5"><span class="material-symbols-outlined ${variance >= 0 ? 'text-[#059669]' : 'text-[#DC2626]'} text-sm">${variance >= 0 ? 'check_circle' : 'warning'}</span><span class="text-label-tag font-label-tag text-[#475569]">Total Variance:</span></div>
+      <span class="font-label-numeric-md text-label-numeric-md ${variance >= 0 ? 'text-[#059669]' : 'text-[#DC2626]'} font-semibold">${variance >= 0 ? '+' : '-'}${fmt(Math.abs(variance))} EGP ${variance >= 0 ? 'Unspent' : 'Over'}</span>
+    </div>
+  </section>
+  <div class="flex items-center gap-space-xs overflow-x-auto pb-1 no-scrollbar text-label-tag font-label-tag">
+    ${chip('all', 'All Categories', counts.all)}${chip('over', 'Over Budget', counts.over, true)}${chip('progress', 'In Progress', counts.progress)}${chip('pending', 'Not Started', counts.pending)}
+  </div>
+  <div id="boq-list" class="flex flex-col gap-space-md"></div>`;
+}
+
+function fillBoqList() {
+  const box = document.getElementById('boq-list'); if (!box) return;
+  const p = proj(), q = ui.q.trim().toLowerCase();
+  let html = '', shown = 0;
+  p.categories.forEach((c, ci) => {
+    const st = catState(c);
+    if (ui.filter === 'over' && st !== 'over') return;
+    if (ui.filter === 'progress' && (st === 'over' || st === 'pending')) return;
+    if (ui.filter === 'pending' && st !== 'pending') return;
+    const catHit = q && c.name.toLowerCase().includes(q);
+    let items = c.items.map((i, ii) => ({i, ii}));
+    if (ui.statusFilter) items = items.filter(o => o.i.status === ui.statusFilter);
+    if (q && !catHit) items = items.filter(o => (o.i.name + ' ' + o.i.desc + ' ' + o.i.status).toLowerCase().includes(q));
+    if ((q && !catHit && !items.length) || (ui.statusFilter && !items.length)) return;
+    shown++;
+    html += categoryHtml(c, ci, items, !!q);
+  });
+  if (!shown) {
+    html = `<div class="text-center text-on-surface-variant py-8 border border-dashed border-outline-variant rounded-lg">${p.categories.length ? 'No matching categories or items.' : 'No categories yet. Add your first one to start the BOQ.'}</div>`;
+  }
+  html += `<button data-act="add-cat" class="h-12 rounded-lg border border-dashed border-outline text-primary font-semibold flex items-center justify-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all"><span class="material-symbols-outlined">add</span>Add category</button>`;
+  box.innerHTML = html;
+}
+
+function categoryHtml(c, ci, items, forceOpen) {
+  const st = catState(c), planned = catPlanned(c), actual = catActual(c), diff = planned - actual;
+  const [bl, bbg, bfg] = CAT_BADGE[st];
+  const open = forceOpen || ui.open[c.id] !== false;
+  const over = st === 'over';
+  const pctLeft = planned ? Math.round(Math.max(0, diff) / planned * 100) : 0;
+  return `<section class="bg-surface-container-low border ${over ? 'border-error/50' : 'border-outline-variant'} rounded-lg overflow-hidden">
+  <div data-act="toggle-cat" data-id="${c.id}" class="p-space-md ${over ? 'bg-surface-container/60 border-error/20' : 'bg-surface-container/40 border-outline-variant'} ${open ? 'border-b' : ''} flex flex-col gap-space-xs cursor-pointer hover:bg-surface-container-high transition-colors">
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 min-w-0"><span class="material-symbols-outlined ${over ? 'text-error' : 'text-primary'} text-lg">${over ? 'warning' : esc(c.icon)}</span>
+        <h3 class="text-headline-sm font-headline-sm text-on-surface truncate">${ci + 1}. ${esc(c.name)}</h3></div>
+      <div class="flex items-center gap-2"><span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase border border-white/10 whitespace-nowrap" style="background:${bbg};color:${bfg}">${bl}</span>
+        <span class="material-symbols-outlined text-on-surface-variant text-base">${open ? 'expand_less' : 'expand_more'}</span></div>
+    </div>
+    <div class="grid grid-cols-3 gap-2 pt-1 font-label-numeric-sm text-label-numeric-sm">
+      <div><span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Planned</span><span class="text-on-surface">${fmt(planned)} <span class="text-[10px] text-outline">EGP</span></span></div>
+      <div><span class="text-[10px] text-on-surface-variant font-label-tag block uppercase">Spent</span><span class="${over ? 'text-error' : 'text-on-surface'} font-semibold">${fmt(actual)} <span class="text-[10px] text-outline">EGP</span></span></div>
+      <div class="text-right"><span class="text-[10px] ${over ? 'text-error' : 'text-primary'} font-label-tag block uppercase">${over ? 'Variance' : 'Remaining'}</span>
+        <span class="${over ? 'text-[#FCA5A5]' : 'text-primary'} font-semibold">${over ? '-' + fmt(-diff) + ' EGP (-' + (planned ? (-diff / planned * 100).toFixed(1) : '0') + '%)' : fmt(diff) + ' EGP' + (planned ? ' (' + pctLeft + '%)' : '')}</span></div>
+    </div>
+  </div>
+  ${open ? `<div class="divide-y divide-outline-variant/40">
+    ${items.map(o => itemHtml(c, ci, o.i, o.ii)).join('') || '<div class="p-space-md text-body-sm text-on-surface-variant">No items in this category yet.</div>'}
+    <div class="p-space-md flex items-center justify-between">
+      <button data-act="add-item" data-cat="${c.id}" class="text-primary text-label-tag font-label-tag flex items-center gap-1 hover:underline"><span class="material-symbols-outlined text-base">add_circle</span>Add item</button>
+      <button data-act="edit-cat" data-id="${c.id}" class="text-on-surface-variant text-label-tag font-label-tag flex items-center gap-1 hover:underline"><span class="material-symbols-outlined text-base">edit</span>Edit category</button>
+    </div></div>` : ''}
+  </section>`;
+}
+
+function itemHtml(c, ci, i, ii) {
+  const a = itemActual(i), over = a > i.planned, diff = i.planned - a;
+  const code = String(ci + 1).padStart(2, '0') + '.' + (ii + 1);
+  const [bg, fg] = over ? ['#7F1D1D', '#FCA5A5'] : STATUSES[i.status];
+  const n = i.expenses.length;
+  const slips = ui.slips[i.id]
+    ? `<div class="mt-1 rounded bg-surface-container-lowest border border-outline-variant/50 divide-y divide-outline-variant/30">
+        ${n ? i.expenses.slice().sort((x, y) => y.date.localeCompare(x.date) || y.ts - x.ts).map(x => `
+          <div class="flex items-center justify-between gap-2 px-3 py-2">
+            <div class="min-w-0"><div class="text-body-sm text-on-surface truncate">${esc(x.note || (x.amount < 0 ? 'Refund / credit' : 'Expense'))}</div><div class="text-[11px] text-outline">${fdate(x.date)}</div></div>
+            <div class="flex items-center gap-1"><span class="font-label-numeric-sm text-label-numeric-sm font-semibold ${x.amount < 0 ? 'text-primary' : 'text-on-surface'}">${x.amount < 0 ? '-' : ''}${fmt(Math.abs(x.amount))}</span>
+              <button data-act="del-exp" data-item="${i.id}" data-exp="${x.id}" aria-label="Delete transaction" class="w-7 h-7 rounded flex items-center justify-center text-outline hover:text-error"><span class="material-symbols-outlined text-base">delete</span></button></div>
+          </div>`).join('') : '<div class="px-3 py-2 text-body-sm text-on-surface-variant">No transactions yet.</div>'}
+      </div>` : '';
+  return `<article class="p-space-md flex flex-col gap-2 ${over ? 'bg-error-container/10' : 'hover:bg-surface-container/30'} transition-colors">
+    <div class="flex items-start justify-between gap-2">
+      <div class="min-w-0"><div class="flex items-center gap-2"><span class="font-label-numeric-sm text-label-numeric-sm ${over ? 'text-primary' : 'text-on-surface-variant'} font-bold">${code}</span>
+        <h4 class="font-body-md text-body-md text-on-surface font-semibold">${esc(i.name)}</h4></div>
+        ${i.desc ? `<p class="text-body-sm text-body-sm text-on-surface-variant mt-0.5">${esc(i.desc)}</p>` : ''}</div>
+      ${badge(over ? 'Over-budget' : i.status, bg, fg)}
+    </div>
+    <div class="flex items-center justify-between text-label-numeric-sm font-label-numeric-sm pt-1 border-t border-outline-variant/30">
+      <div><span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span><span class="text-on-surface-variant">${fmt(i.planned)} EGP</span></div>
+      <div><span class="text-[10px] text-outline uppercase block font-label-tag">Actual</span><span class="text-on-surface font-medium">${fmt(a)} EGP</span></div>
+      <div class="text-right"><span class="text-[10px] ${over ? 'text-error' : 'text-primary'} uppercase block font-label-tag">${over ? 'Variance' : 'Remaining'}</span>
+        <span class="${over ? 'text-error' : 'text-primary'} font-semibold">${over ? '-' + fmt(-diff) : '+' + fmt(diff)} EGP</span></div>
+    </div>
+    <div class="flex items-center justify-between text-body-sm text-on-surface-variant pt-1">
+      <button data-act="slips" data-id="${i.id}" class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-sm text-outline">receipt_long</span><span class="text-[11px]">${n} transaction${n === 1 ? '' : 's'}</span><span class="text-label-tag font-label-tag text-primary ml-1">${ui.slips[i.id] ? 'Hide' : 'View'} Slips</span></button>
+      <div class="flex items-center gap-1">
+        <button data-act="exp-sub" data-item="${i.id}" aria-label="Subtract amount" class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface hover:border-primary active:scale-95"><span class="material-symbols-outlined text-base">remove</span></button>
+        <button data-act="exp-add" data-item="${i.id}" aria-label="Add expense" class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-primary hover:border-primary active:scale-95"><span class="material-symbols-outlined text-base">add</span></button>
+        <button data-act="edit-item" data-item="${i.id}" aria-label="Edit item" class="w-8 h-8 rounded flex items-center justify-center text-outline hover:text-on-surface"><span class="material-symbols-outlined text-base">edit</span></button>
+      </div>
+    </div>
+    ${slips}
+  </article>`;
+}
+
+/* ---------- Projects view ---------- */
+function viewProjects() {
+  return `<div class="flex items-center justify-between"><h2 class="text-headline-md font-headline-md text-on-surface">Projects</h2>
+    <button data-act="new-project" class="h-10 px-4 rounded bg-primary text-on-primary font-bold flex items-center gap-1 active:scale-95"><span class="material-symbols-outlined text-lg">add</span>New project</button></div>
+  ${state.projects.map(p => {
+    const t = totals(p), pct = t.planned ? Math.min(100, t.actual / t.planned * 100) : 0, cur = p.id === state.currentId;
+    return `<section class="bg-surface-container-low border ${cur ? 'border-primary/60' : 'border-outline-variant'} rounded-lg p-space-md flex flex-col gap-2">
+      <div class="flex items-start justify-between gap-2"><div class="min-w-0"><h3 class="text-headline-sm font-headline-sm text-on-surface truncate">${esc(p.name)}</h3><p class="text-label-tag font-label-tag text-on-surface-variant uppercase">${esc(p.phase || 'No phase set')}</p></div>
+        ${cur ? badge('Open', '#064E3B', '#6EE7B7') : ''}</div>
+      <div class="grid grid-cols-2 gap-2 font-label-numeric-sm text-label-numeric-sm"><div><span class="text-[10px] text-outline uppercase block font-label-tag">Planned</span>${fmt(t.planned)} EGP</div><div class="text-right"><span class="text-[10px] text-outline uppercase block font-label-tag">Spent</span>${fmt(t.actual)} EGP</div></div>
+      <div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div class="h-full ${t.actual > t.planned ? 'bg-error' : 'bg-primary'}" style="width:${pct}%"></div></div>
+      <div class="flex gap-2 pt-1"><button data-act="open-project" data-id="${p.id}" class="flex-1 h-10 rounded border border-primary text-primary font-semibold active:scale-95">Open BOQ</button>
+        <button data-act="edit-project" data-id="${p.id}" class="h-10 px-4 rounded border border-outline-variant text-on-surface-variant active:scale-95">Edit</button></div>
+    </section>`;
+  }).join('')}`;
+}
+
+/* ---------- Cash flow view ---------- */
+function viewCashflow(p) {
+  const list = allExpenses(p), month = today().slice(0, 7);
+  const net = list.reduce((s, o) => s + o.x.amount, 0);
+  const thisMonth = list.filter(o => o.x.date.startsWith(month)).reduce((s, o) => s + o.x.amount, 0);
+  const refunds = list.filter(o => o.x.amount < 0).reduce((s, o) => s - o.x.amount, 0);
+  const stat = (l, v, cls = 'text-on-surface') => `<div class="bg-surface-container-low border border-outline-variant rounded-lg p-space-md"><span class="text-[10px] text-outline uppercase block font-label-tag">${l}</span><span class="font-label-numeric-md text-label-numeric-md ${cls} font-semibold">${fmt(v)}</span><span class="text-[10px] text-outline"> EGP</span></div>`;
+  let body = '', last = '';
+  list.forEach(o => {
+    const m = o.x.date.slice(0, 7);
+    if (m !== last) { last = m; body += `<div class="text-label-tag font-label-tag text-on-surface-variant uppercase pt-2">${new Date(m + '-01T00:00').toLocaleDateString('en-US', {month: 'long', year: 'numeric'})}</div>`; }
+    body += `<div class="flex items-center justify-between gap-2 bg-surface-container-low border border-outline-variant rounded-lg px-space-md py-2">
+      <div class="min-w-0"><div class="text-body-md text-on-surface truncate">${esc(o.i.name)}</div><div class="text-[11px] text-outline truncate">${esc(o.c.name)} · ${fdate(o.x.date)}${o.x.note ? ' · ' + esc(o.x.note) : ''}</div></div>
+      <div class="flex items-center gap-1"><span class="font-label-numeric-sm text-label-numeric-sm font-semibold ${o.x.amount < 0 ? 'text-primary' : 'text-on-surface'}">${o.x.amount < 0 ? '+' : '-'}${fmt(Math.abs(o.x.amount))}</span>
+        <button data-act="del-exp" data-item="${o.i.id}" data-exp="${o.x.id}" aria-label="Delete transaction" class="w-7 h-7 rounded flex items-center justify-center text-outline hover:text-error"><span class="material-symbols-outlined text-base">delete</span></button></div></div>`;
+  });
+  return `<h2 class="text-headline-md font-headline-md text-on-surface">Cash Flow</h2>
+  <div class="grid grid-cols-3 gap-2">${stat('Net spent', net)}${stat('This month', thisMonth)}${stat('Refunds', refunds, 'text-primary')}</div>
+  ${body || '<div class="text-center text-on-surface-variant py-8 border border-dashed border-outline-variant rounded-lg">No transactions yet. Tap Add Expense to log the first one.</div>'}`;
+}
+
+/* ---------- Reports view ---------- */
+function viewReports(p) {
+  const t = totals(p);
+  const rows = p.categories.map(c => ({c, pl: catPlanned(c), ac: catActual(c)}));
+  const max = Math.max(1, ...rows.flatMap(r => [r.pl, r.ac]));
+  const overs = [];
+  p.categories.forEach(c => c.items.forEach(i => { const d = itemActual(i) - i.planned; if (d > 0) overs.push({c, i, d}); }));
+  overs.sort((a, b) => b.d - a.d);
+  const btn = (act, ic, label) => `<button data-act="${act}" class="h-11 rounded border border-outline-variant text-on-surface flex items-center justify-center gap-1 hover:border-primary active:scale-95"><span class="material-symbols-outlined text-lg text-primary">${ic}</span>${label}</button>`;
+  return `<h2 class="text-headline-md font-headline-md text-on-surface">Reports</h2>
+  <section class="bg-surface-container-low border border-outline-variant rounded-lg p-space-md flex flex-col gap-3">
+    <h3 class="text-headline-sm font-headline-sm text-on-surface">Budget vs actual by category</h3>
+    ${rows.map(r => `<div><div class="flex justify-between text-body-sm"><span class="text-on-surface">${esc(r.c.name)}</span><span class="font-label-numeric-sm text-label-numeric-sm ${r.ac > r.pl ? 'text-error' : 'text-on-surface-variant'}">${fmt(r.ac)} / ${fmt(r.pl)}</span></div>
+      <div class="mt-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-outline" style="width:${r.pl / max * 100}%"></div></div>
+      <div class="mt-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full ${r.ac > r.pl ? 'bg-error' : 'bg-primary'}" style="width:${Math.max(0, r.ac) / max * 100}%"></div></div></div>`).join('') || '<p class="text-body-sm text-on-surface-variant">No categories yet.</p>'}
+    <div class="flex items-center gap-3 text-[11px] text-outline"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-outline"></span>Planned</span><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span>Actual</span><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error"></span>Over</span></div>
+  </section>
+  <section class="bg-surface-container-low border border-outline-variant rounded-lg p-space-md flex flex-col gap-2">
+    <h3 class="text-headline-sm font-headline-sm text-on-surface">Biggest overspends</h3>
+    ${overs.slice(0, 5).map(o => `<div class="flex justify-between text-body-sm"><span class="text-on-surface truncate pr-2">${esc(o.i.name)} <span class="text-outline">· ${esc(o.c.name)}</span></span><span class="font-label-numeric-sm text-label-numeric-sm text-error whitespace-nowrap">-${fmt(o.d)} EGP</span></div>`).join('') || '<p class="text-body-sm text-on-surface-variant">Nothing over budget. Good.</p>'}
+    <div class="flex justify-between pt-2 border-t border-outline-variant text-body-sm"><span class="text-on-surface-variant">Project variance</span><span class="font-label-numeric-sm text-label-numeric-sm font-semibold ${t.planned - t.actual >= 0 ? 'text-primary' : 'text-error'}">${t.planned - t.actual >= 0 ? '+' : '-'}${fmt(Math.abs(t.planned - t.actual))} EGP</span></div>
+  </section>
+  <section class="grid grid-cols-2 gap-2">${btn('export-xlsx', 'table_view', 'Export .XLSX')}${btn('export-csv', 'csv', 'Export .CSV')}${btn('backup', 'download', 'Backup (JSON)')}${btn('restore', 'upload', 'Restore backup')}</section>
+  <button data-act="reset" class="text-error text-label-tag font-label-tag self-center hover:underline">Reset to demo data</button>`;
+}
+
+/* ============ forms ============ */
+function openExpenseForm(itemId, mode = 'add') {
+  const p = proj();
+  if (!p.categories.some(c => c.items.length)) {
+    toast('Add a category and an item first'); ui.view = 'boq'; render();
+    if (!p.categories.length) openCategoryForm(); else openItemForm(p.categories[0].id);
+    return;
+  }
+  const first = p.categories.find(c => c.items.length).items[0].id, sel = itemId || first;
+  const opts = p.categories.filter(c => c.items.length).map(c => `<optgroup label="${esc(c.name)}">${c.items.map(i => `<option value="${i.id}" ${i.id === sel ? 'selected' : ''}>${esc(i.name)}</option>`).join('')}</optgroup>`).join('');
+  const seg = (v, label, on) => `<label class="cursor-pointer"><input type="radio" name="mode" value="${v}" class="peer sr-only" ${on ? 'checked' : ''}/><div class="h-10 rounded border border-outline-variant flex items-center justify-center text-body-sm font-semibold text-on-surface-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary">${label}</div></label>`;
+  openSheet(mode === 'sub' ? 'Subtract / refund' : 'Add expense', `<form data-form="expense" class="flex flex-col gap-3">
+    <div class="grid grid-cols-2 gap-2">${seg('add', '+ Add expense', mode !== 'sub')}${seg('sub', '− Subtract / refund', mode === 'sub')}</div>
+    <div><label class="${LBL}">BOQ item</label><select name="item" class="${INP}">${opts}</select></div>
+    <div class="grid grid-cols-2 gap-2"><div><label class="${LBL}">Amount (EGP)</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="any" required class="${INP}" placeholder="0"/></div>
+      <div><label class="${LBL}">Date</label><input name="date" type="date" required value="${today()}" class="${INP}"/></div></div>
+    <div><label class="${LBL}">Note (supplier, slip no.)</label><input name="note" type="text" class="${INP}" placeholder="Optional"/></div>
+    ${submitBtn('Save')}</form>`);
+}
+function openCategoryForm(id) {
+  const c = id ? proj().categories.find(x => x.id === id) : null;
+  openSheet(c ? 'Edit category' : 'New category', `<form data-form="category" data-id="${c ? c.id : ''}" class="flex flex-col gap-3">
+    <div><label class="${LBL}">Name</label><input name="name" required class="${INP}" value="${esc(c ? c.name : '')}" placeholder="e.g. Plumbing"/></div>
+    <div><label class="${LBL}">Icon</label><select name="icon" class="${INP}">${Object.entries(ICONS).map(([l, v]) => `<option value="${v}" ${c && c.icon === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    ${submitBtn(c ? 'Save changes' : 'Add category', c ? dangerBtn('del-cat', 'Delete', `data-id="${c.id}"`) : '')}</form>`);
+}
+function openItemForm(catId, itemId) {
+  const p = proj(), found = itemId ? findItem(itemId) : null, i = found ? found.i : null;
+  openSheet(i ? 'Edit item' : 'New BOQ item', `<form data-form="item" data-id="${i ? i.id : ''}" class="flex flex-col gap-3">
+    ${i ? '' : `<div><label class="${LBL}">Category</label><select name="cat" class="${INP}">${p.categories.map(c => `<option value="${c.id}" ${c.id === catId ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select></div>`}
+    <div><label class="${LBL}">Item name</label><input name="name" required class="${INP}" value="${esc(i ? i.name : '')}" placeholder="e.g. Gypsum Board Ceilings"/></div>
+    <div><label class="${LBL}">Description</label><input name="desc" class="${INP}" value="${esc(i ? i.desc : '')}" placeholder="Spec, quantity, rate..."/></div>
+    <div class="grid grid-cols-2 gap-2"><div><label class="${LBL}">Planned (EGP)</label><input name="planned" type="number" inputmode="decimal" min="0" step="any" required class="${INP}" value="${i ? i.planned : ''}"/></div>
+      <div><label class="${LBL}">Status</label><select name="status" class="${INP}">${Object.keys(STATUSES).map(s => `<option ${i && i.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div></div>
+    ${submitBtn(i ? 'Save changes' : 'Add item', i ? dangerBtn('del-item', 'Delete', `data-item="${i.id}"`) : '')}</form>`);
+}
+function openProjectForm(id) {
+  const p = id ? state.projects.find(x => x.id === id) : null;
+  openSheet(p ? 'Edit project' : 'New project', `<form data-form="project" data-id="${p ? p.id : ''}" class="flex flex-col gap-3">
+    <div><label class="${LBL}">Project name</label><input name="name" required class="${INP}" value="${esc(p ? p.name : '')}" placeholder="e.g. Apartment 12, New Cairo"/></div>
+    <div><label class="${LBL}">Phase</label><input name="phase" class="${INP}" value="${esc(p ? p.phase : 'Site Phase 01 · Planning')}"/></div>
+    ${p ? '' : `<label class="flex items-start gap-2 text-body-sm text-on-surface-variant"><input type="checkbox" name="std" checked class="mt-0.5 rounded"/>Start with 8 standard categories (Gypsum, Electrical, Woodwork, Plumbing, Painting, Flooring, Lighting, Furniture)</label>`}
+    ${submitBtn(p ? 'Save changes' : 'Create project', p && state.projects.length > 1 ? dangerBtn('del-project', 'Delete', `data-id="${p.id}"`) : '')}</form>`);
+}
+function openFilterForm() {
+  openSheet('Filter items', `<form data-form="filter" class="flex flex-col gap-3">
+    <div><label class="${LBL}">Item status</label><select name="status" class="${INP}"><option value="">All statuses</option>${Object.keys(STATUSES).map(s => `<option ${ui.statusFilter === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+    ${submitBtn('Apply')}</form>`);
+}
+function openAlerts() {
+  const p = proj(), lines = [];
+  p.categories.forEach(c => {
+    const d = catActual(c) - catPlanned(c);
+    if (d > 0) lines.push(`<div class="flex gap-2 items-start"><span class="material-symbols-outlined text-error text-lg">warning</span><div><div class="text-on-surface text-body-md">${esc(c.name)} is over budget</div><div class="text-body-sm text-on-surface-variant">by ${fmt(d)} EGP</div></div></div>`);
+    c.items.forEach(i => { const di = itemActual(i) - i.planned; if (di > 0) lines.push(`<div class="flex gap-2 items-start"><span class="material-symbols-outlined text-tertiary text-lg">error</span><div><div class="text-on-surface text-body-md">${esc(i.name)}</div><div class="text-body-sm text-on-surface-variant">${esc(c.name)} · over by ${fmt(di)} EGP</div></div></div>`); });
+  });
+  openSheet('Alerts', lines.length ? `<div class="flex flex-col gap-3">${lines.join('')}</div>` : '<p class="text-on-surface-variant">No alerts. Everything is within budget.</p>');
+}
+
+function handleSubmit(form) {
+  const f = new FormData(form), p = proj(), kind = form.dataset.form, id = form.dataset.id;
+  if (kind === 'expense') {
+    const found = findItem(f.get('item')); if (!found) return;
+    const amt = Math.abs(parseFloat(f.get('amount')));
+    if (!(amt > 0)) return toast('Enter an amount greater than 0');
+    const signed = f.get('mode') === 'sub' ? -amt : amt;
+    if (itemActual(found.i) + signed < 0) return toast('You cannot subtract more than has been spent on this item');
+    found.i.expenses.push({id: uid(), amount: signed, date: f.get('date') || today(), note: (f.get('note') || '').trim(), ts: Date.now()});
+    toast(signed < 0 ? 'Subtracted ' + fmt(amt) + ' EGP' : 'Added ' + fmt(amt) + ' EGP');
+  } else if (kind === 'category') {
+    const name = (f.get('name') || '').trim(); if (!name) return;
+    if (id) { const c = p.categories.find(x => x.id === id); c.name = name; c.icon = f.get('icon'); }
+    else p.categories.push({id: uid(), name, icon: f.get('icon'), items: []});
+  } else if (kind === 'item') {
+    const name = (f.get('name') || '').trim(), planned = parseFloat(f.get('planned')); if (!name || !(planned >= 0)) return toast('Enter a name and a planned amount');
+    if (id) { const i = findItem(id).i; Object.assign(i, {name, desc: (f.get('desc') || '').trim(), planned, status: f.get('status')}); }
+    else { const c = p.categories.find(x => x.id === f.get('cat')); c.items.push({id: uid(), name, desc: (f.get('desc') || '').trim(), planned, status: f.get('status'), expenses: []}); ui.open[c.id] = true; }
+  } else if (kind === 'project') {
+    const name = (f.get('name') || '').trim(); if (!name) return;
+    if (id) { const x = state.projects.find(q => q.id === id); x.name = name; x.phase = (f.get('phase') || '').trim(); }
+    else {
+      const np = {id: uid(), name, phase: (f.get('phase') || '').trim(), categories: f.get('std') ? STD_CATEGORIES.map(([n, ic]) => ({id: uid(), name: n, icon: ic, items: []})) : []};
+      state.projects.push(np); state.currentId = np.id; ui.view = 'boq'; ui.q = ''; ui.filter = 'all'; ui.statusFilter = '';
+      toast('Project created');
+    }
+  } else if (kind === 'filter') { ui.statusFilter = f.get('status') || ''; }
+  save(); closeSheet(); render();
+}
+
+/* ============ export / backup ============ */
+function download(name, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }
+function boqSheet(p) {
+  const rows = [['Code', 'Category', 'Item', 'Description', 'Status', 'Planned (EGP)', 'Actual (EGP)', 'Variance (EGP)']];
+  p.categories.forEach((c, ci) => c.items.forEach((i, ii) => {
+    const r = rows.length + 1, a = itemActual(i);
+    rows.push([String(ci + 1).padStart(2, '0') + '.' + (ii + 1), c.name, i.name, i.desc, i.status, i.planned, a, {t: 'n', f: `F${r}-G${r}`, v: i.planned - a}]);
+  }));
+  const n = rows.length;
+  rows.push(['', '', 'TOTAL', '', '', {t: 'n', f: `SUM(F2:F${n})`, v: totals(p).planned}, {t: 'n', f: `SUM(G2:G${n})`, v: totals(p).actual}, {t: 'n', f: `F${n + 1}-G${n + 1}`, v: totals(p).planned - totals(p).actual}]);
+  return rows;
+}
+function expSheet(p) {
+  const rows = [['Date', 'Category', 'Item', 'Amount (EGP)', 'Note']];
+  allExpenses(p).slice().reverse().forEach(o => rows.push([o.x.date, o.c.name, o.i.name, o.x.amount, o.x.note]));
+  return rows;
+}
+function exportXlsx() {
+  const p = proj(), name = slug(p.name) + '-BOQ-' + today();
+  if (!window.XLSX) { toast('Excel library not loaded (offline?). Exporting CSV instead'); return exportCsv(); }
+  const wb = XLSX.utils.book_new();
+  const s1 = XLSX.utils.aoa_to_sheet(boqSheet(p)); s1['!cols'] = [8, 22, 34, 40, 16, 14, 14, 14].map(w => ({wch: w}));
+  const s2 = XLSX.utils.aoa_to_sheet(expSheet(p)); s2['!cols'] = [12, 22, 34, 14, 30].map(w => ({wch: w}));
+  XLSX.utils.book_append_sheet(wb, s1, 'BOQ'); XLSX.utils.book_append_sheet(wb, s2, 'Expenses');
+  XLSX.writeFile(wb, name + '.xlsx'); toast('Excel file downloaded');
+}
+function exportCsv() {
+  const p = proj(), q = v => { v = v && typeof v === 'object' ? v.v : v; return '"' + String(v ?? '').replace(/"/g, '""') + '"'; };
+  const csv = boqSheet(p).map(r => r.map(q).join(',')).join('\r\n');
+  download(slug(p.name) + '-BOQ-' + today() + '.csv', new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'}));
+}
+function backup() { download('boq-backup-' + today() + '.json', new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'})); toast('Backup downloaded'); }
+
+/* ============ events ============ */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const act = el.dataset.act, d = el.dataset;
+  if (act === 'close-bd' && e.target !== el) return;
+  const p = proj();
+  switch (act) {
+    case 'close': case 'close-bd': closeSheet(); return;
+    case 'nav': ui.view = d.view; render(); window.scrollTo(0, 0); return;
+    case 'fab': openExpenseForm(); return;
+    case 'sync': save(); render(); toast('All changes are saved on this device'); return;
+    case 'alerts': openAlerts(); return;
+    case 'chip': ui.filter = d.key; render(); return;
+    case 'filter-modal': openFilterForm(); return;
+    case 'toggle-cat': ui.open[d.id] = ui.open[d.id] === false; fillBoqList(); return;
+    case 'slips': ui.slips[d.id] = !ui.slips[d.id]; if (ui.view === 'boq') fillBoqList(); return;
+    case 'exp-add': openExpenseForm(d.item, 'add'); return;
+    case 'exp-sub': openExpenseForm(d.item, 'sub'); return;
+    case 'edit-item': openItemForm(null, d.item); return;
+    case 'add-item': openItemForm(d.cat); return;
+    case 'add-cat': openCategoryForm(); return;
+    case 'edit-cat': openCategoryForm(d.id); return;
+    case 'new-project': openProjectForm(); return;
+    case 'edit-project': openProjectForm(d.id); return;
+    case 'open-project': state.currentId = d.id; ui.view = 'boq'; ui.q = ''; ui.filter = 'all'; ui.statusFilter = ''; save(); render(); window.scrollTo(0, 0); return;
+    case 'del-exp': {
+      const f = findItem(d.item); if (!f) return;
+      const x = f.i.expenses.find(q => q.id === d.exp); if (!x || !confirm('Delete this transaction (' + fmt(Math.abs(x.amount)) + ' EGP)?')) return;
+      f.i.expenses = f.i.expenses.filter(q => q.id !== d.exp); save(); render(); return;
+    }
+    case 'del-item': { const f = findItem(d.item); if (f && confirm('Delete "' + f.i.name + '" and its transactions?')) { f.c.items = f.c.items.filter(q => q.id !== d.item); save(); closeSheet(); render(); } return; }
+    case 'del-cat': { const c = p.categories.find(q => q.id === d.id); if (c && confirm('Delete category "' + c.name + '" with all its items and transactions?')) { p.categories = p.categories.filter(q => q.id !== d.id); save(); closeSheet(); render(); } return; }
+    case 'del-project': {
+      const x = state.projects.find(q => q.id === d.id);
+      if (x && state.projects.length > 1 && confirm('Delete project "' + x.name + '" completely?')) { state.projects = state.projects.filter(q => q.id !== d.id); if (state.currentId === d.id) state.currentId = state.projects[0].id; save(); closeSheet(); render(); }
+      return;
+    }
+    case 'export-xlsx': exportXlsx(); return;
+    case 'export-csv': exportCsv(); return;
+    case 'backup': backup(); return;
+    case 'restore': document.getElementById('import-file').click(); return;
+    case 'reset': if (confirm('Replace ALL data on this device with the demo project?')) { state = seed(); ui = {view: 'boq', q: '', filter: 'all', statusFilter: '', open: {}, slips: {}}; save(); render(); toast('Demo data restored'); } return;
+  }
+});
+document.addEventListener('submit', e => { e.preventDefault(); handleSubmit(e.target); });
+document.addEventListener('input', e => { if (e.target.id === 'q') { ui.q = e.target.value; fillBoqList(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+document.getElementById('import-file').addEventListener('change', e => {
+  const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try { const s = sanitize(JSON.parse(r.result)); if (!confirm('Replace all data on this device with this backup?')) return; state = s; save(); render(); toast('Backup restored'); }
+    catch (err) { toast('That file is not a valid backup'); }
+  };
+  r.readAsText(file);
+});
+
+render();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </body></html>
